@@ -12,19 +12,16 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes();
 
+
+Auth::routes();
+Route::group(["middleware"=>["admin" , "auth"],"prefix"=>"admin"],function (){
+    require_once "admin.php";
+});
 require_once "user.php";
 
-Route::group(["middleware"=>["admin","auth"],"admin","prefix"=>"admin"],function(){
-    require_once "admin.php";
 
 
-});
+Auth::routes();
 
-//Route::get('/', 'AbcController@index');
-//Route::get('/login','LoginController@loginRouting');
-//Route::get('/register','RegisterController@registerRouting');
-//Route::get('/forgotPwd', 'ForgotPwdController@ForgotPwd');
-
-
+Route::get('/home', 'HomeController@index')->name('home');
