@@ -19,7 +19,7 @@ class AbcController extends Controller
         return view("home");
     }
 
-              //category
+    //category
     public function listcategory()
     {
 
@@ -44,6 +44,8 @@ class AbcController extends Controller
             Category::create([
                 "category_name" => $request->get("category_name"),
             ]);
+            $data["message"] = "Vừa thêm 1 danh mục mới là ".$request->get("category_name");
+            notify("global","new_category",$data);
         } catch (\Exception $exception) {
             return redirect()->back();
         }
@@ -77,13 +79,14 @@ class AbcController extends Controller
         $category = Category::findOrFail($id);
         try {
             $category->delete();
+            notify("home", "home_page", []);
         } catch (\Exception $exception) {
 
         }
         return redirect()->to("admin/list-category");
     }
 
-               //brand
+    //brand
     public function listbrand()
     {
         $brands = Brand::all();
@@ -151,7 +154,7 @@ class AbcController extends Controller
     }
 
 
-              //product
+    //product
     public function listProduct()
     {
         $products = Product::with("Category")->with("Brand")->paginate(20);
@@ -163,7 +166,10 @@ class AbcController extends Controller
         $categories = Category::all();
         $brands = Brand::all();
 
-        return view("product.new", ["categories" => $categories, "brands" => $brands]);
+        return view("product.new", [
+            "categories" => $categories,
+            "brands" => $brands
+        ]);
     }
 
     public function saveProduct(Request $request)
@@ -205,14 +211,17 @@ class AbcController extends Controller
         }
         return redirect()->to("admin/list-product");
     }
-    public function editProduct($id){
+
+    public function editProduct($id)
+    {
         $product = Product::findOrFail($id);
         $category = Category::all();
         $brand = Brand::all();
-        return view("product.edit",["product"=>$product,"categories"=>$category,"brands"=>$brand]);
+        return view("product.edit", ["product" => $product, "categories" => $category, "brands" => $brand]);
     }
 
-    public function updateProduct($id,Request $request){
+    public function updateProduct($id, Request $request)
+    {
         $product = Product::findOrFail($id);
         $request->validate([
             "product_name" => "required|min:3|unique:products,product_name,{$id}",
@@ -225,37 +234,38 @@ class AbcController extends Controller
 
         try {
             $product_image = $product->get("product_image");
-            if($request->hasFile("product_image")){
+            if ($request->hasFile("product_image")) {
                 $file = $request->file("product_image");
-                $allow = ["png","jpg","jpeg","gif","jfif"];
+                $allow = ["png", "jpg", "jpeg", "gif", "jfif"];
                 $extName = $file->getClientOriginalExtension();
-                if(in_array($extName,$allow)){
-                    $fileName = time().$file->getClientOriginalName(); //  lấy tên gốc original của file gửi lên từ client
-                    $file->move(public_path("media"),$fileName); // đẩy file vào thư mục media với tên là fileName
+                if (in_array($extName, $allow)) {
+                    $fileName = time() . $file->getClientOriginalName(); //  lấy tên gốc original của file gửi lên từ client
+                    $file->move(public_path("media"), $fileName); // đẩy file vào thư mục media với tên là fileName
                     //convert string to ProductImage
-                    $product_image = "media/".$fileName; // lấy nguồn file
+                    $product_image = "media/" . $fileName; // lấy nguồn file
                 }
             }
             $product->update([
-                "product_name"=>$request->get("product_name"),
-                "product_image"=>$product_image,
-                "product_desc"=>$request->get("product_desc"),
-                "price"=>$request->get("price"),
-                "qty"=>$request->get("qty"),
-                "category_id"=>$request->get("category_id"),
-                "brand_id"=>$request->get("brand_id"),
+                "product_name" => $request->get("product_name"),
+                "product_image" => $product_image,
+                "product_desc" => $request->get("product_desc"),
+                "price" => $request->get("price"),
+                "qty" => $request->get("qty"),
+                "category_id" => $request->get("category_id"),
+                "brand_id" => $request->get("brand_id"),
             ]);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return redirect()->back();
         }
         return redirect()->to("admin/list-product");
     }
 
-    public function deleteProduct($id){
+    public function deleteProduct($id)
+    {
         $product = Product::findOrfail($id);
         try {
             $product->delete();
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
 
         }
         return redirect()->to("admin/list-product");

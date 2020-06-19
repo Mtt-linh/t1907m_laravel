@@ -1,5 +1,31 @@
 @extends("frontend.layout")
 @section("content")
+    <!--  Demo notification-->
+    <script src="{{asset("https://js.pusher.com/6.0/pusher.min.js")}}"></script>
+    <script>
+
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('e495fe1cd2236609404e', {
+            cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('new_category', function(data) {
+            alert(data.message);
+        });
+        channel.bind("new_product",function (data)
+        {
+            alert(data.message);
+
+        });
+        var vtv6 = pusher.subscribe("home");
+        vtv6.bind("home_page",function (data) {
+            location.reload();
+        });
+    </script>
+    <!-- end demo notification-->
     <!-- Hero Section Begin -->
     <section class="hero">
         <div class="container">

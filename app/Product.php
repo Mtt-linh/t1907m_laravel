@@ -36,4 +36,15 @@ class Product extends Model
     public function Brand(){
         return $this->belongsTo("\App\Brand");
     }
+    public  function  toArray()
+    {
+        return [
+          "id"=>$this->__get("id"),
+          "name"=>$this->__get("product_name"),
+          "image"=>$this->getImage()
+        ];
+    }
+    public function getProductUrl(){
+        return url("/product/{$this->__get("slug")}");
+    }
 }
