@@ -157,7 +157,7 @@ class AbcController extends Controller
     //product
     public function listProduct()
     {
-        $products = Product::with("Category")->with("Brand")->paginate(20);
+        $products = Product::with("Category")->with("Brand")->orderBy("id","desc")->paginate(20);
         return view("product.list", ["products" => $products]);
     }
 
@@ -206,7 +206,7 @@ class AbcController extends Controller
                 "category_id" => $request->get("category_id"),
                 "brand_id" => $request->get("brand_id"),
             ]);
-        } catch (\Exception $exception) {
+        } catch (\Exception $e) {
             return redirect()->back();
         }
         return redirect()->to("admin/list-product");
