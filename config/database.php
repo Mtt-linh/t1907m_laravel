@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 
 return [
 
+
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name
@@ -65,12 +66,18 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+//            'url' =>
+            // env('DATABASE_URL'),
+            'host' => 'ec2-34-197-188-147.compute-1.amazonaws.com',
+//env('DB_HOST', '127.0.0.1'),
+            'port' =>'5432',
+            //env('DB_PORT', '5432'),
+            'database' =>'dapqr0o9us10sm',
+            //env('DB_DATABASE', 'forge'),
+            'username' => 'cnzfzbsjyajhik',
+            //env('DB_USERNAME', 'forge'),
+            'password' =>'7b17142999bafc3d7f4e671af09c9f0c3fd3955b3396a9db3ea1924f20b62a7a',
+            //env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
